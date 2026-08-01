@@ -1,0 +1,110 @@
+version: "3.8"
+
+services:
+  db-v1:
+    image: mysql:8.0
+    container_name: db-v1
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: app_v1
+      MYSQL_USER: appv1
+      MYSQL_PASSWORD: appv1pass
+    volumes:
+      - db-v1-data:/var/lib/mysql
+    networks:
+      - seg-net
+    ports:
+      - "3306:3306"
+
+  app-v1:
+    build:
+      context: ./app-v1-vulnerable
+      dockerfile: Dockerfile
+    container_name: app-v1
+    depends_on:
+      - db-v1
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      DB_CONNECTION: mysql
+      DB_HOST: db-v1
+      DB_PORT: 3306
+      DB_DATABASE: app_v1
+      DB_USERNAME: appv1
+      DB_PASSWORD: appv1pass
+    volumes:
+      - ./app-v1-vulnerable:/var/www/html
+    networks:
+      - seg-net
+
+  nginx-v1:
+    image: nginx:alpine
+    container_name: nginx-v1
+    depends_on:
+      - app-v1
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app-v1-vulnerable:/var/www/html
+      - ./nginx/nginx-v1.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - seg-net
+
+  db-v2:
+    image: mysql:8.0
+    container_name: db-v2
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: app_v2
+      MYSQL_USER: appv2
+      MYSQL_PASSWORD: appv2pass
+    volumes:
+      - db-v2-data:/var/lib/mysql
+    networks:
+      - seg-net
+    ports:
+      - "3307:3306"
+
+  app-v2:
+    build:
+      context: ./app-v2-hardened
+      dockerfile: Dockerfile
+    container_name: app-v2
+    depends_on:
+      - db-v2
+    environment:
+      APP_ENV: local
+      APP_DEBUG: false
+      DB_CONNECTION: mysql
+      DB_HOST: db-v2
+      DB_PORT: 3306
+      DB_DATABASE: app_v2
+      DB_USERNAME: appv2
+      DB_PASSWORD: appv2pass
+    volumes:
+      - ./app-v2-hardened:/var/www/html
+    networks:
+      - seg-net
+
+  nginx-v2:
+    image: nginx:alpine
+    container_name: nginx-v2
+    depends_on:
+      - app-v2
+    ports:
+      - "80:80"
+      - "8443:443"
+    volumes:
+      - ./app-v2-hardened:/var/www/html
+      - ./nginx/nginx-v2.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/certs:ro
+    networks:
+      - seg-net
+
+networks:
+  seg-net:
+    driver: bridge
+
+volumes:
+  db-v1-data:
+  db-v2-data:
