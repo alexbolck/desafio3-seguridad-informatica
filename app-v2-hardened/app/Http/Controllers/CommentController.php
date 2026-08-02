@@ -9,8 +9,9 @@ class CommentController extends Controller
 {
     public function index()
     {
-        $comments = Comment::orderBy('created_at', 'desc')->get();
-        return view('comments.index', compact('comments'));
+        $comments = Comment::with('user')->orderBy('created_at', 'desc')->get();
+        $totalComments = Comment::count();
+        return view('comments.index', compact('comments', 'totalComments'));
     }
 
     public function store(Request $request)

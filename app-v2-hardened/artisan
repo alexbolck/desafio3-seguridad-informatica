@@ -1,0 +1,94 @@
+#!/usr/bin/env php
+<?php
+
+$action = $argv[1] ?? null;
+$seed = in_array('--seed', $argv, true) || in_array('seed', $argv, true);
+
+if ($action === 'migrate') {
+    $pdo = connectDb();
+    migrate($pdo);
+    if ($seed) {
+        seed($pdo);
+    }
+    echo "Migrations completed.\n";
+    exit(0);
+}
+
+if ($action === 'db:seed') {
+    $pdo = connectDb();
+    seed($pdo);
+    echo "Seeders completed.\n";
+    exit(0);
+}
+
+echo "Usage: php artisan migrate [--seed]\n";
+exit(1);
+
+function connectDb(): PDO
+{
+    $host = getenv('DB_HOST') ?: 'db-v2';
+    $port = getenv('DB_PORT') ?: '3306';
+    $db = getenv('DB_DATABASE') ?: 'app_v2';
+    $user = getenv('DB_USERNAME') ?: 'appv2';
+    $pass = getenv('DB_PASSWORD') ?: 'appv2pass';
+
+    $dsn = "mysql:host={$host};port={$port};dbname={$db};charset=utf8mb4";
+    return new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+}
+
+function migrate(PDO $pdo): void
+{
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS users (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            role ENUM('admin','user') NOT NULL DEFAULT 'user',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS comments (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT UNSIGNED NOT NULL,
+            body TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            CONSTRAINT fk_comments_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ");
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS files (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT UNSIGNED NOT NULL,
+            filename VARCHAR(255) NOT NULL,
+            path VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            CONSTRAINT fk_files_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ");
+}
+
+function seed(PDO $pdo): void
+{
+    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)");
+    $users = [
+        ['name' => 'Admin User', 'email' => 'admin@test.com', 'password' => password_hash('Admin123!', PASSWORD_BCRYPT), 'role' => 'admin'],
+        ['name' => 'Alice Example', 'email' => 'alice@test.com', 'password' => password_hash('User123!', PASSWORD_BCRYPT), 'role' => 'user'],
+        ['name' => 'Bob Example', 'email' => 'bob@test.com', 'password' => password_hash('User123!', PASSWORD_BCRYPT), 'role' => 'user'],
+    ];
+
+    foreach ($users as $user) {
+        $stmt->execute([
+            ':name' => $user['name'],
+            ':email' => $user['email'],
+            ':password' => $user['password'],
+            ':role' => $user['role'],
+        ]);
+    }
+}

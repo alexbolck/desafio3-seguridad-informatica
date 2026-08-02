@@ -12,7 +12,8 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('login');
+        $users = \App\Models\User::count();
+        return view('login', compact('users'));
     }
 
     public function login(Request $request)

@@ -1,22 +1,33 @@
-<!doctype html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <title>Comentarios</title>
-</head>
-<body>
-    <h1>Comentarios</h1>
-    <form action="/comments" method="post">
-        @csrf
-        <textarea name="body" placeholder="Escribe un comentario"></textarea>
-        <button type="submit">Guardar</button>
-    </form>
+@extends('layouts.app')
 
-    <h2>Comentarios publicados</h2>
-    @foreach($comments as $comment)
-        <div>
-            {{ $comment->body }}
+@section('title', 'Comentarios - V2')
+
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-success">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-3 text-success">Comentarios</h2>
+                <div class="alert alert-secondary">Total de comentarios: {{ $totalComments }}</div>
+                <form action="/comments" method="post" class="mb-4">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label">Nuevo comentario</label>
+                        <textarea name="body" class="form-control" rows="3" placeholder="Escribe un comentario"></textarea>
+                    </div>
+                    <button class="btn btn-success">Guardar</button>
+                </form>
+
+                <h4 class="mt-4">Comentarios publicados</h4>
+                @foreach($comments as $comment)
+                    <div class="border rounded p-3 mb-2">
+                        <div class="fw-bold text-success">{{ $comment->user->name ?? 'Usuario' }}</div>
+                        {{ $comment->body }}
+                        <div class="text-muted small mt-2">{{ $comment->created_at }}</div>
+                    </div>
+                @endforeach
+            </div>
         </div>
-    @endforeach
-</body>
-</html>
+    </div>
+</div>
+@endsection

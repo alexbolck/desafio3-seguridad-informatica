@@ -9,7 +9,8 @@ class FileController extends Controller
 {
     public function index()
     {
-        return view('files.index');
+        $files = \App\Models\FileModel::latest()->get();
+        return view('files.index', compact('files'));
     }
 
     public function upload(Request $request)

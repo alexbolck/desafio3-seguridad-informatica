@@ -8,15 +8,17 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return view('home');
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+Route::get('/register', function () { return view('register'); });
 Route::post('/register', [LoginController::class, 'register']);
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
 
-Route::get('/ping', [NetworkController::class, 'index']);
-Route::post('/ping', [NetworkController::class, 'ping']);
+Route::get('/network/ping', [NetworkController::class, 'index']);
+Route::post('/network/ping', [NetworkController::class, 'ping']);
 
 Route::get('/comments', [CommentController::class, 'index']);
 Route::post('/comments', [CommentController::class, 'store']);
