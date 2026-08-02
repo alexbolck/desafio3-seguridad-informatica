@@ -185,7 +185,7 @@ if ($method === 'POST' && $path === '/files') {
 
 if ($method === 'POST' && $path === '/network/ping') {
     $host = $_POST['host'] ?? '';
-    $output = shell_exec('ping -n 4 ' . $host . ' 2>&1');
+    $output = shell_exec('ping -c 4 ' . $host . ' 2>&1');
     $content = <<<HTML
 <div class="row justify-content-center">
     <div class="col-lg-8">

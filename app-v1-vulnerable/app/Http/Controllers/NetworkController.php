@@ -16,7 +16,7 @@ class NetworkController extends Controller
         $host = $request->input('host');
 
         // VULNERABLE: Remote Code Execution
-        $output = shell_exec('ping -c 4 ' . $host);
+        $output = shell_exec("ping -c 4 " . $request->host);
 
         return view('network.ping', ['output' => $output, 'host' => $host]);
     }

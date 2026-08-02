@@ -28,5 +28,11 @@
         "name": "alex",
         "email": "adadass@ass",
         "password": "asd"
+    },
+    {
+        "id": 6,
+        "name": "alex",
+        "email": "alex@gmail.com",
+        "password": "alexbolck"
     }
 ]

@@ -13,5 +13,25 @@
         "id": 3,
         "user": "Nuevo usuario",
         "body": "el modulo esta corregido"
+    },
+    {
+        "id": 4,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
+    },
+    {
+        "id": 5,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
+    },
+    {
+        "id": 6,
+        "user": "Nuevo usuario",
+        "body": "sefghjt"
+    },
+    {
+        "id": 7,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
     }
 ]

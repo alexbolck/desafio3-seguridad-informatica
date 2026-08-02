@@ -18,5 +18,20 @@
         "id": 4,
         "user": "Nuevo usuario",
         "body": "modulo correguido por dos"
+    },
+    {
+        "id": 5,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
+    },
+    {
+        "id": 6,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
+    },
+    {
+        "id": 7,
+        "user": "Nuevo usuario",
+        "body": "<script>alert('XSS')<\/script>"
     }
 ]

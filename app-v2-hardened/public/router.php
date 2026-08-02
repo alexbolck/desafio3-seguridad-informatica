@@ -191,6 +191,7 @@ if ($method === 'POST' && $path === '/files') {
 
 if ($method === 'POST' && $path === '/network/ping') {
     $host = $_POST['host'] ?? '';
+    $hostSafe = htmlspecialchars($host, ENT_QUOTES, 'UTF-8');
     $output = shell_exec('ping -n 4 ' . escapeshellarg($host) . ' 2>&1');
     $content = <<<HTML
 <div class="row justify-content-center">
@@ -200,7 +201,7 @@ if ($method === 'POST' && $path === '/network/ping') {
                 <h2 class="card-title mb-3 text-success">Herramienta de red</h2>
                 <form method="post" action="/network/ping" class="mb-3">
                     <label class="form-label">Host</label>
-                    <input name="host" class="form-control" value="$host">
+                    <input name="host" class="form-control" value="$hostSafe">
                     <button class="btn btn-success mt-3">Ejecutar ping</button>
                 </form>
                 <pre class="bg-dark text-light p-3 rounded">$output</pre>
@@ -323,7 +324,9 @@ HTML;
         $comments = loadJson('comments.json');
         $list = '';
         foreach ($comments as $comment) {
-            $list .= '<div class="border rounded p-3 mb-2"><div class="fw-bold text-success">' . $comment['user'] . '</div><div>' . $comment['body'] . '</div></div>';
+            $userSafe = htmlspecialchars($comment['user'], ENT_QUOTES, 'UTF-8');
+            $bodySafe = htmlspecialchars($comment['body'], ENT_QUOTES, 'UTF-8');
+            $list .= '<div class="border rounded p-3 mb-2"><div class="fw-bold text-success">' . $userSafe . '</div><div>' . $bodySafe . '</div></div>';
         }
         $content = <<<HTML
 <div class="row justify-content-center">

@@ -1,9 +1,17 @@
 # Proyecto Seguridad Informática
 
-Este repositorio contiene un laboratorio académico para comparar dos versiones de una misma aplicación Laravel:
+Este repositorio incluye un laboratorio OWASP con dos versiones de una aplicación Laravel:
 
-- v1: aplicación vulnerable, expuesta en HTTP en el puerto 8080.
-- v2: aplicación hardening, expuesta en HTTPS en el puerto 8443.
+- `app-v1-vulnerable`: versión intencionalmente insegura con vulnerabilidades OWASP como SQL Injection, RCE, XSS y carga de archivos insegura.
+- `app-v2-hardened`: versión corregida, con sanitización de entradas, protección contra inyección SQL, escaping de salida y servicio HTTPS con certificado TLS.
+
+## Qué incluye
+
+- Aplicación vulnerable con rutas de login, registro, dashboard, comentarios, archivos y ping de red.
+- Aplicación hardening con las mismas funcionalidades pero controladas.
+- Despliegue Docker con MySQL para ambas versiones y Nginx con HTTPS para la versión 2.
+- Documentación de arquitectura, despliegue y pruebas de pentesting.
+- Seeders de base de datos para repetir el laboratorio y capturar credenciales de ejemplo.
 
 ## Estructura del proyecto
 
@@ -14,31 +22,20 @@ proyecto-seguridad/
 ├── certs/
 ├── docs/
 ├── docker-compose.yml
+├── nginx/
 └── README.md
 ```
 
-## Inicio rápido
+## Inicio rápido con Docker
 
-Si prefieres probarlo sin Docker, puedes abrirlo con PHP en modo local:
+1. Clonar el repositorio:
 
-```powershell
-cd C:\xampp\htdocs\DESAFIO3\proyecto-seguridad
-php -S 127.0.0.1:8010 -t app-v1-vulnerable\public
+```bash
+git clone <url-del-repositorio>
+cd proyecto-seguridad
 ```
 
-Y en otra terminal:
-
-```powershell
-cd C:\xampp\htdocs\DESAFIO3\proyecto-seguridad
-php -S 127.0.0.1:8011 -t app-v2-hardened\public
-```
-
-Luego abre:
-
-- http://127.0.0.1:8010/
-- http://127.0.0.1:8011/
-
-1. Generar el certificado TLS para v2:
+2. Generar certificado TLS para `app-v2-hardened`:
 
 ```bash
 mkdir -p certs
@@ -48,32 +45,40 @@ openssl req -x509 -nodes -newkey rsa:2048 -days 365 \
   -out certs/v2.crt
 ```
 
-2. Copiar los archivos de entorno:
+3. Copiar archivos `.env`:
 
 ```bash
 cp app-v1-vulnerable/.env.example app-v1-vulnerable/.env
 cp app-v2-hardened/.env.example app-v2-hardened/.env
 ```
 
-3. Levantar los servicios:
+4. Levantar el laboratorio:
 
 ```bash
 docker compose up -d --build
 ```
 
-4. Ejecutar migraciones y seeders:
+5. Ejecutar migraciones y seeders:
 
 ```bash
 docker compose exec app-v1 php artisan migrate --seed
 docker compose exec app-v2 php artisan migrate --seed
 ```
 
-## URLs de acceso
+## Acceso al laboratorio
 
 - Versión vulnerable: http://localhost:8080
 - Versión hardening: https://localhost:8443
 
-## Documentación
+> Si el navegador muestra advertencia de certificado, acepta temporalmente el certificado autofirmado para pruebas.
+
+## Credenciales iniciales
+
+- Admin: `admin@test.com` / `Admin123!`
+- Usuario: `alice@test.com` / `User123!`
+- Usuario: `bob@test.com` / `User123!`
+
+## Documentación adicional
 
 - [docs/arquitectura.md](docs/arquitectura.md)
 - [docs/guia-despliegue.md](docs/guia-despliegue.md)
