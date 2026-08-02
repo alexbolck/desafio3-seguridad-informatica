@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "user": "Marta",
+        "body": "El laboratorio hardening est\u00e1 listo."
+    },
+    {
+        "id": 2,
+        "user": "Luis",
+        "body": "La validaci\u00f3n de archivos ahora limita tipo y tama\u00f1o."
+    },
+    {
+        "id": 3,
+        "user": "Nuevo usuario",
+        "body": "hola a todos"
+    },
+    {
+        "id": 4,
+        "user": "Nuevo usuario",
+        "body": "modulo correguido por dos"
+    }
+]

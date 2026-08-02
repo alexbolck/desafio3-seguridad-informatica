@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "notes.txt",
+        "path": "\/storage\/uploads\/notes.txt",
+        "size": 123
+    },
+    {
+        "id": 2,
+        "name": "PENSAMIENTO.txt",
+        "path": "\/storage\/uploads\/PENSAMIENTO.txt",
+        "size": 134
+    }
+]

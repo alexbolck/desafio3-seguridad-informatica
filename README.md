@@ -19,6 +19,25 @@ proyecto-seguridad/
 
 ## Inicio rápido
 
+Si prefieres probarlo sin Docker, puedes abrirlo con PHP en modo local:
+
+```powershell
+cd C:\xampp\htdocs\DESAFIO3\proyecto-seguridad
+php -S 127.0.0.1:8010 -t app-v1-vulnerable\public
+```
+
+Y en otra terminal:
+
+```powershell
+cd C:\xampp\htdocs\DESAFIO3\proyecto-seguridad
+php -S 127.0.0.1:8011 -t app-v2-hardened\public
+```
+
+Luego abre:
+
+- http://127.0.0.1:8010/
+- http://127.0.0.1:8011/
+
 1. Generar el certificado TLS para v2:
 
 ```bash

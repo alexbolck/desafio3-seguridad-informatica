@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "user": "Carlos",
+        "body": "El laboratorio vulnerable est\u00e1 listo."
+    },
+    {
+        "id": 2,
+        "user": "Ana",
+        "body": "El m\u00f3dulo de archivos acepta cualquier fichero."
+    },
+    {
+        "id": 3,
+        "user": "Nuevo usuario",
+        "body": "el modulo esta corregido"
+    }
+]

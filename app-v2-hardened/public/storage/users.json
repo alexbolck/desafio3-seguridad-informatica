@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "Marta Secure",
+        "email": "marta@example.com",
+        "password": "StrongPass123!"
+    },
+    {
+        "id": 2,
+        "name": "Luis",
+        "email": "luis@example.com",
+        "password": "Luis2026!"
+    },
+    {
+        "id": 3,
+        "name": "alex",
+        "email": "alex@gmail.com",
+        "password": "alex"
+    },
+    {
+        "id": 4,
+        "name": "alex",
+        "email": "aadasd@adsd",
+        "password": "q"
+    },
+    {
+        "id": 5,
+        "name": "asdd",
+        "email": "asadsas@d",
+        "password": "asdad"
+    }
+]
